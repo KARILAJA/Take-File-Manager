@@ -1,0 +1,10 @@
+{
+  "name": "com.turboget.host",
+  "description": "Take File Manager Native Messaging Host",
+  "path": "turboget-host.exe",
+  "type": "stdio",
+  "allowed_origins": [
+    "chrome-extension://mbikddgphpokomgjlnkgipejppbjileo/",
+    "chrome-extension://nmgolfmhnmdnimfakegjfkcappnepolo/"
+  ]
+}

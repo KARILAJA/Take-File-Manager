@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: "Hanken Grotesk", Inter, system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: light;
+
+  /* Take File Manager — Light Mode Surface & Accent Tokens */
+  --tg-surface: 245 247 252;          /* #F5F7FC */
+  --tg-surface-lowest: 255 255 255;   /* #FFFFFF */
+  --tg-surface-low: 238 242 249;      /* #EEF2F9 */
+  --tg-surface-container: 255 255 255;/* #FFFFFF */
+  --tg-surface-high: 229 235 245;     /* #E5EBF5 */
+  --tg-surface-highest: 217 225 239;  /* #D9E1EF */
+  --tg-on-surface: 15 23 42;          /* #0F172A */
+  --tg-on-surface-variant: 71 85 105; /* #475569 */
+  --tg-outline-variant: 203 213 225;  /* #CBD5E1 */
+  --tg-primary: 37 99 235;            /* #2563EB */
+  --tg-primary-container: 37 99 235;  /* #2563EB */
+  --tg-secondary: 5 150 105;          /* #059669 */
+  --tg-tertiary: 217 119 6;           /* #D97706 */
+  --tg-error: 220 38 38;              /* #DC2626 */
+}
+
+.dark {
+  color-scheme: dark;
+
+  /* Take File Manager — Google Stitch Nocturnal Telemetry Dark Palette */
+  --tg-surface: 11 19 38;             /* #0B1326 */
+  --tg-surface-lowest: 6 14 32;       /* #060E20 */
+  --tg-surface-low: 19 27 46;         /* #131B2E */
+  --tg-surface-container: 23 31 51;   /* #171F33 */
+  --tg-surface-high: 34 42 61;        /* #222A3D */
+  --tg-surface-highest: 45 52 73;     /* #2D3449 */
+  --tg-on-surface: 218 226 253;       /* #DAE2FD */
+  --tg-on-surface-variant: 195 198 215;/* #C3C6D7 */
+  --tg-outline-variant: 67 70 85;     /* #434655 */
+  --tg-primary: 180 197 255;          /* #B4C5FF */
+  --tg-primary-container: 37 99 235;  /* #2563EB */
+  --tg-secondary: 104 219 169;        /* #68DBA9 */
+  --tg-tertiary: 255 183 125;         /* #FFB77D */
+  --tg-error: 255 180 171;            /* #FFB4AB */
+}
+
+/* Clean Precision Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgb(var(--tg-highest));
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(var(--tg-outline-variant));
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pengaturan Take File Manager Extension</title>
+  <style>
+    :root {
+      --bg: #0b1326;
+      --lowest: #060e20;
+      --card: #171f33;
+      --high: #222a3d;
+      --ink: #dae2fd;
+      --muted: #93a1be;
+      --outline: rgba(141, 144, 160, 0.28);
+      --primary: #2563eb;
+      --primary-ink: #b4c5ff;
+      --secondary: #68dba9;
+    }
+    body.light {
+      --bg: #f5f7fc;
+      --lowest: #ffffff;
+      --card: #ffffff;
+      --high: #e5ebf5;
+      --ink: #0f172a;
+      --muted: #475569;
+      --outline: rgba(148, 163, 184, 0.45);
+      --primary: #2563eb;
+      --primary-ink: #1d4ed8;
+      --secondary: #059669;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 28px 16px;
+      font-family: "Hanken Grotesk", system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 13px;
+    }
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--lowest);
+      border: 1px solid var(--outline);
+      border-radius: 12px;
+      padding: 14px 18px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand img {
+      height: 30px;
+      width: auto;
+      object-fit: contain;
+    }
+    .brand h1 {
+      margin: 0;
+      font-size: 17px;
+      font-weight: 700;
+    }
+    .brand p {
+      margin: 2px 0 0;
+      font-size: 11.5px;
+      color: var(--muted);
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--outline);
+      border-radius: 12px;
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .card-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      font-weight: 700;
+      color: var(--primary-ink);
+    }
+    .check-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .check-row input {
+      accent-color: var(--primary);
+      width: 15px;
+      height: 15px;
+    }
+    label.field-label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+      font-size: 12px;
+    }
+    input[type="number"], textarea {
+      width: 100%;
+      padding: 9px 10px;
+      border-radius: 8px;
+      border: 1px solid var(--outline);
+      background: var(--lowest);
+      color: var(--ink);
+      font-family: "JetBrains Mono", ui-monospace, monospace;
+      font-size: 12px;
+      outline: none;
+    }
+    input[type="number"]:focus, textarea:focus {
+      border-color: var(--primary);
+    }
+    .presets {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+    }
+    .btn-ghost {
+      background: var(--high);
+      color: var(--ink);
+      border: 1px solid var(--outline);
+      border-radius: 6px;
+      padding: 5px 10px;
+      font-size: 11px;
+      cursor: pointer;
+    }
+    .btn-ghost:hover { border-color: var(--primary); }
+    .actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--lowest);
+      border: 1px solid var(--outline);
+      border-radius: 12px;
+      padding: 12px 18px;
+    }
+    .btn-save {
+      background: var(--primary);
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      padding: 9px 18px;
+      font-weight: 600;
+      font-size: 12.5px;
+      cursor: pointer;
+    }
+    .btn-save:hover { filter: brightness(1.1); }
+    .saved {
+      color: var(--secondary);
+      font-weight: 600;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="brand">
+        <img src="../icons/logo.png" alt="Take File Manager" />
+        <div>
+          <h1>Pengaturan Ekstensi — Take File Manager</h1>
+          <p>Konfigurasi penangkapan unduhan otomatis, filter file, dan integrasi desktop</p>
+        </div>
+      </div>
+      <button id="themeBtn" class="btn-ghost">Mode Terang</button>
+    </header>
+
+    <section class="card">
+      <div class="card-title">Penangkapan &amp; Prompt</div>
+      <label class="check-row">
+        <input type="checkbox" id="enabled" />
+        <span>Aktifkan Penangkapan Unduhan Otomatis dari Browser</span>
+      </label>
+      <label class="check-row">
+        <input type="checkbox" id="askSaveLocation" />
+        <span>Selalu Tanyakan Folder Simpan Sebelum Mengunduh (Seperti IDM)</span>
+      </label>
+      <div>
+        <label class="field-label" for="minSizeKb">Ukuran Minimum Otomatis Tangkap (KB):</label>
+        <input type="number" id="minSizeKb" min="0" value="1024" />
+        <div class="presets">
+          <button type="button" class="btn-ghost size-preset" data-kb="0">Semua (0 KB)</button>
+          <button type="button" class="btn-ghost size-preset" data-kb="512">512 KB</button>
+          <button type="button" class="btn-ghost size-preset" data-kb="1024">1 MB</button>
+          <button type="button" class="btn-ghost size-preset" data-kb="10240">10 MB</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-title">Filter Berkas &amp; Pengecualian</div>
+      <div>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <label class="field-label" for="extensions">Ekstensi Berkas yang Ditangkap (pisahkan koma):</label>
+          <button type="button" id="resetExtBtn" class="btn-ghost" style="margin-bottom:6px;">Reset Default</button>
+        </div>
+        <textarea id="extensions" rows="3"></textarea>
+      </div>
+      <div>
+        <label class="field-label" for="excluded">Domain yang Dikecualikan (satu host per baris, mis. example.com):</label>
+        <textarea id="excluded" rows="4"></textarea>
+      </div>
+    </section>
+
+    <div class="actions">
+      <span id="statusMsg" class="saved"></span>
+      <button id="saveBtn" class="btn-save">Simpan Pengaturan</button>
+    </div>
+  </div>
+  <script src="options.js"></script>
+</body>
+</html>

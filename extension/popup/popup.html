@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Take File Manager</title>
+  <style>
+    :root {
+      --bg: #0b1326;
+      --lowest: #060e20;
+      --card: #171f33;
+      --high: #222a3d;
+      --ink: #dae2fd;
+      --muted: #93a1be;
+      --outline: rgba(141, 144, 160, 0.28);
+      --primary: #2563eb;
+      --primary-ink: #b4c5ff;
+      --secondary: #68dba9;
+      --error: #ffb4ab;
+    }
+    body.light {
+      --bg: #f5f7fc;
+      --lowest: #ffffff;
+      --card: #ffffff;
+      --high: #e5ebf5;
+      --ink: #0f172a;
+      --muted: #475569;
+      --outline: rgba(148, 163, 184, 0.45);
+      --primary: #2563eb;
+      --primary-ink: #1d4ed8;
+      --secondary: #059669;
+      --error: #dc2626;
+    }
+    * { box-sizing: border-box; }
+    body {
+      width: 360px;
+      margin: 0;
+      padding: 0;
+      font-family: "Hanken Grotesk", system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 12px;
+      user-select: none;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--lowest);
+      border-bottom: 1px solid var(--outline);
+      padding: 10px 12px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .brand img {
+      height: 22px;
+      width: auto;
+      object-fit: contain;
+      border-radius: 4px;
+    }
+    .brand-title {
+      font-weight: 700;
+      font-size: 13.5px;
+      letter-spacing: -0.01em;
+    }
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-family: "JetBrains Mono", ui-monospace, monospace;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: var(--high);
+      border: 1px solid var(--outline);
+      color: var(--muted);
+    }
+    .badge .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--muted);
+    }
+    .badge.online { color: var(--secondary); border-color: rgba(104, 219, 169, 0.4); }
+    .badge.online .dot { background: var(--secondary); }
+    .badge.offline { color: var(--error); border-color: rgba(255, 180, 171, 0.4); }
+    .badge.offline .dot { background: var(--error); }
+
+    .theme-btn {
+      background: var(--card);
+      color: var(--muted);
+      border: 1px solid var(--outline);
+      border-radius: 6px;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 12px;
+      padding: 0;
+    }
+    .theme-btn:hover { background: var(--high); color: var(--ink); }
+
+    .content { padding: 12px; display: flex; flex-direction: column; gap: 10px; }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--outline);
+      border-radius: 10px;
+      padding: 10px 12px;
+    }
+    .switch-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 0;
+    }
+    .switch-row + .switch-row {
+      border-top: 1px solid var(--outline);
+      margin-top: 6px;
+      padding-top: 8px;
+    }
+    .switch-label {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .switch-label strong { font-size: 12px; font-weight: 600; }
+    .switch-label span { font-size: 10.5px; color: var(--muted); }
+
+    .toggle {
+      position: relative;
+      display: inline-block;
+      width: 34px;
+      height: 19px;
+      flex-shrink: 0;
+    }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background-color: var(--high);
+      border: 1px solid var(--outline);
+      transition: 0.2s;
+      border-radius: 999px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 13px;
+      width: 13px;
+      left: 2px;
+      bottom: 2px;
+      background-color: var(--ink);
+      transition: 0.2s;
+      border-radius: 50%;
+    }
+    .toggle input:checked + .slider {
+      background-color: var(--primary);
+      border-color: var(--primary);
+    }
+    .toggle input:checked + .slider:before {
+      transform: translateX(15px);
+      background-color: #ffffff;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+      font-size: 10.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-weight: 700;
+      color: var(--muted);
+    }
+    .media-list {
+      max-height: 195px;
+      overflow-y: auto;
+      border: 1px solid var(--outline);
+      border-radius: 8px;
+      background: var(--lowest);
+    }
+    .media-empty {
+      color: var(--muted);
+      text-align: center;
+      padding: 18px 10px;
+      font-size: 11px;
+    }
+    .media-item {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--outline);
+    }
+    .media-item:last-child { border-bottom: none; }
+    .media-top {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .kind-pill {
+      font-family: "JetBrains Mono", ui-monospace, monospace;
+      font-size: 9.5px;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 4px;
+      background: rgba(37, 99, 235, 0.2);
+      color: var(--primary-ink);
+      flex-shrink: 0;
+    }
+    .media-url {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 11px;
+      color: var(--ink);
+      font-family: "JetBrains Mono", ui-monospace, monospace;
+    }
+    .media-controls {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+    .media-hint {
+      font-size: 10px;
+      color: var(--muted);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    select {
+      flex: 1;
+      background: var(--card);
+      color: var(--ink);
+      border: 1px solid var(--outline);
+      border-radius: 6px;
+      font-size: 11px;
+      padding: 4px 6px;
+      outline: none;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+      border: none;
+      border-radius: 6px;
+      padding: 5px 10px;
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+    .btn-primary:hover { filter: brightness(1.1); }
+    .btn-primary:disabled { background: var(--secondary); color: #022c22; cursor: default; }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 12px;
+      background: var(--lowest);
+      border-top: 1px solid var(--outline);
+      font-size: 11px;
+    }
+    .footer-link {
+      color: var(--primary-ink);
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .footer-link:hover { text-decoration: underline; }
+    .ver {
+      font-family: "JetBrains Mono", ui-monospace, monospace;
+      font-size: 10px;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <img src="../icons/logo.png" alt="Take File Manager" />
+      <span class="brand-title">Take File Manager</span>
+    </div>
+    <div class="header-right">
+      <button id="themeBtn" class="theme-btn" title="Ganti Tema">&#9790;</button>
+      <span id="statusBadge" class="badge">
+        <span class="dot"></span>
+        <span id="statusText">Memeriksa...</span>
+      </span>
+    </div>
+  </header>
+
+  <main class="content">
+    <section class="card">
+      <div class="switch-row">
+        <div class="switch-label">
+          <strong>Tangkap Unduhan Otomatis</strong>
+          <span>Arahkan file, arsip, &amp; torrent ke TFM</span>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="toggleCapture" checked />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="switch-row">
+        <div class="switch-label">
+          <strong>Tanya Folder Simpan</strong>
+          <span>Tampilkan dialog konfirmasi unduhan</span>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="toggleAskSave" checked />
+          <span class="slider"></span>
+        </label>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <span>Media Terdeteksi di Tab Ini</span>
+        <span id="mediaCount">0 item</span>
+      </div>
+      <div id="mediaList" class="media-list">
+        <div class="media-empty">Belum ada video/audio terdeteksi pada halaman ini.</div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <a href="#" id="openOptions" class="footer-link">&#9881; Pengaturan Ekstensi</a>
+    <span class="ver">v0.1.0 PRO</span>
+  </footer>
+
+  <script src="popup.js"></script>
+</body>
+</html>
